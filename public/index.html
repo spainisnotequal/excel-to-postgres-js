@@ -8,7 +8,13 @@
 
   <body>
     <p>Read an Excel file and write its data to a Postgres database</p>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <form id        =  "uploadForm"
+          enctype   =  "multipart/form-data"
+          action    =  "upload"
+          method    =  "post"
+          >
+      <input type="file" name="file" />
+      <input type="submit" value="Upload" name="submit">
+    </form>
   </body>
 </html>
