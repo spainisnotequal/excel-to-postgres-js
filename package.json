@@ -19,7 +19,8 @@
   "homepage": "https://github.com/spainisnotequal/excel-to-postgres-js#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "xlsx": "^0.15.6"
   },
   "devDependencies": {
     "nodemon": "^2.0.3"

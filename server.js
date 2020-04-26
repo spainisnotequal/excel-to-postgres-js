@@ -3,6 +3,8 @@ const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
 
+const { convertExcelToCsv } = require("./utils/excelToCsv");
+
 // create the Express app
 const app = express();
 
@@ -27,7 +29,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, callback) => {
-    const fileExt = path.extname(file.originalname);
+    const fileExt = path.parse(file.originalname).ext;
     if (fileExt !== ".xlsx" && fileExt !== ".xls")
       return callback(new Error("Sorry. Upload a valid .xlsx or .xls file"));
     else return callback(null, true);
@@ -49,9 +51,18 @@ app.post("/upload", (req, res) => {
       });
       return;
     } else {
-      console.log("File correctly uploaded");
-      // Everything went fine
+      // File uploaded to the server
       res.json({ error_code: 0, err_desc: null });
+      console.log(`File ${req.file.filename} correctly uploaded`);
+
+      // Convert Excel to CSV
+      const destination = req.file.destination;
+      const inputFilename = req.file.filename;
+      const outputFilename = path.parse(inputFilename).name + ".csv";
+      const inputFile = path.join(__dirname, destination, inputFilename);
+      const outputFile = path.join(__dirname, destination, outputFilename);
+
+      convertExcelToCsv(inputFile, outputFile);
     }
   });
 });
