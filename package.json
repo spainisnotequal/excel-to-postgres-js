@@ -1,0 +1,26 @@
+{
+  "name": "excel-to-postgres",
+  "version": "1.0.0",
+  "description": "Read an Excel file and write its data to a Postgres database",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spainisnotequal/excel-to-postgres-js.git"
+  },
+  "author": "spainisnotequal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/spainisnotequal/excel-to-postgres-js/issues"
+  },
+  "homepage": "https://github.com/spainisnotequal/excel-to-postgres-js#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3"
+  }
+}
