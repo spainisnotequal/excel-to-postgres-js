@@ -3,6 +3,7 @@ const path = require("path");
 
 // import routes
 const uploadFile = require("./routes/uploadFile");
+const data = require("./routes/data");
 
 // create the Express app
 const app = express();
@@ -15,6 +16,7 @@ app.use("/", express.static(path.join(__dirname, "public")));
 
 // use Routes
 app.use("/api/upload", uploadFile);
+app.use("/api", data);
 
 // configure the port
 const PORT = process.env.PORT || 5000;
