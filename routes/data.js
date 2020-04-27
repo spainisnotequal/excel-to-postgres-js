@@ -34,8 +34,41 @@ router.post("/", (request, response) => {
   const pool = new Pool();
   pool
     .query(query)
-    .then((res) => response.json(res.rows))
-    .catch((err) => response.json(err));
+    .then((res) =>
+      response.json({
+        success: true,
+        message: "Record added to the database",
+      })
+    )
+    .catch((err) => response.json({ success: false, message: err }));
+});
+
+// @route        DELETE /api/:id
+// @description  Delete a record from the database
+// @acces        Public
+router.delete("/:id", (request, response) => {
+  const id = request.params.id;
+
+  const query = `DELETE FROM money_in WHERE id = ${id}`;
+
+  const pool = new Pool();
+  pool
+    .query(query)
+    .then((res) => {
+      // "rowCount" returns the number or rows affected by the query
+      if (res.rowCount) {
+        response.json({
+          success: true,
+          message: "Record deleted from the database",
+        });
+      } else {
+        response.json({
+          success: false,
+          message: "The record doesn't exist",
+        });
+      }
+    })
+    .catch((err) => response.json({ success: false, message: err }));
 });
 
 // export the router
