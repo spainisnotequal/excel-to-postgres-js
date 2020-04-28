@@ -43,6 +43,56 @@ router.post("/", (request, response) => {
     .catch((err) => response.json({ success: false, message: err }));
 });
 
+// @route        PUT /api/:id
+// @description  Update a record from the database
+// @acces        Public
+router.put("/:id", (request, response) => {
+  const id = request.params.id;
+  const date = request.body.date;
+  const concept = request.body.concept;
+  const amount = request.body.amount;
+
+  // Not empty body
+  if (date || concept || amount) {
+    const dateQuery = date ? `date = '${date}'` : "";
+    const conceptQuery = concept ? `concept = '${concept}'` : "";
+    const amountQuery = amount ? `amount = ${amount}` : "";
+    const firstComma = (concept || amount) && date ? "," : "";
+    const secondComma = amount && (date || concept) ? "," : "";
+    const setQuery = `SET ${dateQuery} ${firstComma} ${conceptQuery} ${secondComma} ${amountQuery}`;
+
+    const query = `UPDATE money_in ${setQuery} WHERE id = ${id}`;
+
+    const pool = new Pool();
+    pool
+      .query(query)
+      .then((res) => {
+        // "rowCount" returns the number or rows affected by the query
+        if (res.rowCount) {
+          response.json({
+            success: true,
+            message: "Record updated",
+          });
+        } else {
+          response.json({
+            success: false,
+            message: "The record doesn't exist",
+          });
+        }
+      })
+      .catch((err) =>
+        response.json({ success: false, query: query, message: err })
+      );
+  }
+  // Empty body
+  else {
+    response.json({
+      success: false,
+      message: "Nothing to update",
+    });
+  }
+});
+
 // @route        DELETE /api/:id
 // @description  Delete a record from the database
 // @acces        Public
