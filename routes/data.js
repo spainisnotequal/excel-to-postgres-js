@@ -80,9 +80,7 @@ router.put("/:id", (request, response) => {
           });
         }
       })
-      .catch((err) =>
-        response.json({ success: false, query: query, message: err })
-      );
+      .catch((err) => response.json({ success: false, message: err }));
   }
   // Empty body
   else {
