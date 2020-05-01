@@ -37,11 +37,14 @@ router.get("/:id", (request, response) => {
 // @acces        Public
 router.post("/", (request, response) => {
   const { date, concept, amount } = request.body;
-  const query = `INSERT INTO money_in (date, concept, amount) VALUES ('${date}', '${concept}', ${amount})`;
 
   const pool = new Pool();
   pool
-    .query(query)
+    .query("INSERT INTO money_in (date, concept, amount) VALUES ($1, $2, $3)", [
+      date,
+      concept,
+      amount,
+    ])
     .then((res) =>
       response.json({
         success: true,
@@ -58,43 +61,27 @@ router.put("/:id", (request, response) => {
   const id = parseInt(request.params.id);
   const { date, concept, amount } = request.body;
 
-  // Not empty body
-  if (date || concept || amount) {
-    const dateQuery = date ? `date = '${date}'` : "";
-    const conceptQuery = concept ? `concept = '${concept}'` : "";
-    const amountQuery = amount ? `amount = ${amount}` : "";
-    const firstComma = (concept || amount) && date ? "," : "";
-    const secondComma = amount && (date || concept) ? "," : "";
-    const setQuery = `SET ${dateQuery} ${firstComma} ${conceptQuery} ${secondComma} ${amountQuery}`;
-
-    const query = `UPDATE money_in ${setQuery} WHERE id = ${id}`;
-
-    const pool = new Pool();
-    pool
-      .query(query)
-      .then((res) => {
-        // "rowCount" returns the number or rows affected by the query
-        if (res.rowCount) {
-          response.json({
-            success: true,
-            message: "Record updated",
-          });
-        } else {
-          response.json({
-            success: false,
-            message: "The record doesn't exist",
-          });
-        }
-      })
-      .catch((err) => response.json({ success: false, message: err }));
-  }
-  // Empty body
-  else {
-    response.json({
-      success: false,
-      message: "Nothing to update",
-    });
-  }
+  const pool = new Pool();
+  pool
+    .query(
+      "UPDATE money_in SET date = $1, concept = $2, amount = $3 WHERE id = $4",
+      [date, concept, amount, id]
+    )
+    .then((res) => {
+      // "rowCount" returns the number or rows affected by the query
+      if (res.rowCount) {
+        response.json({
+          success: true,
+          message: "Record updated",
+        });
+      } else {
+        response.json({
+          success: false,
+          message: "The record doesn't exist",
+        });
+      }
+    })
+    .catch((err) => response.json({ success: false, message: err }));
 });
 
 // @route        DELETE /api/:id
