@@ -90,11 +90,9 @@ router.put("/:id", (request, response) => {
 router.delete("/:id", (request, response) => {
   const id = parseInt(request.params.id);
 
-  const query = `DELETE FROM money_in WHERE id = ${id}`;
-
   const pool = new Pool();
   pool
-    .query(query)
+    .query("DELETE FROM money_in WHERE id = $1", [id])
     .then((res) => {
       // "rowCount" returns the number or rows affected by the query
       if (res.rowCount) {
