@@ -12,11 +12,10 @@ const router = express.Router();
 // @route        GET /api/
 // @description  Get all data from the database
 // @acces        Public
-router.get("/", (request, response) => {
-  const query = "SELECT * FROM money_in";
+router.get("/", (_request, response) => {
   const pool = new Pool();
   pool
-    .query(query)
+    .query("SELECT * FROM money_in ORDER BY id ASC")
     .then((res) => response.json(res.rows))
     .catch((err) => response.json(err));
 });
