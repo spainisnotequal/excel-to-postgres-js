@@ -20,6 +20,18 @@ router.get("/", (_request, response) => {
     .catch((err) => response.json(err));
 });
 
+// @route        GET /api/:id
+// @description  Get a single record from the database by its id
+// @acces        Public
+router.get("/:id", (request, response) => {
+  const id = parseInt(request.params.id);
+  const pool = new Pool();
+  pool
+    .query("SELECT * FROM money_in WHERE id = $1", [id])
+    .then((res) => response.json(res.rows))
+    .catch((err) => response.json(err));
+});
+
 // @route        POST /api/
 // @description  Post a new record to the database
 // @acces        Public
