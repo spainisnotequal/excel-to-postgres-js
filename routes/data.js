@@ -45,7 +45,7 @@ router.post("/", (request, response) => {
       concept,
       amount,
     ])
-    .then((res) =>
+    .then(() =>
       response.json({
         success: true,
         message: "Record added to the database",
