@@ -25,10 +25,7 @@ router.get("/", (request, response) => {
 // @description  Post a new record to the database
 // @acces        Public
 router.post("/", (request, response) => {
-  const date = request.body.date;
-  const concept = request.body.concept;
-  const amount = request.body.amount;
-
+  const { date, concept, amount } = request.body;
   const query = `INSERT INTO money_in (date, concept, amount) VALUES ('${date}', '${concept}', ${amount})`;
 
   const pool = new Pool();
@@ -47,10 +44,8 @@ router.post("/", (request, response) => {
 // @description  Update a record from the database
 // @acces        Public
 router.put("/:id", (request, response) => {
-  const id = request.params.id;
-  const date = request.body.date;
-  const concept = request.body.concept;
-  const amount = request.body.amount;
+  const id = parseInt(request.params.id);
+  const { date, concept, amount } = request.body;
 
   // Not empty body
   if (date || concept || amount) {
@@ -95,7 +90,7 @@ router.put("/:id", (request, response) => {
 // @description  Delete a record from the database
 // @acces        Public
 router.delete("/:id", (request, response) => {
-  const id = request.params.id;
+  const id = parseInt(request.params.id);
 
   const query = `DELETE FROM money_in WHERE id = ${id}`;
 
