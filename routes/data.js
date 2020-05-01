@@ -16,7 +16,7 @@ router.get("/", (_request, response) => {
   const pool = new Pool();
   pool
     .query("SELECT * FROM money_in ORDER BY id ASC")
-    .then((results) => response.json(results.rows))
+    .then((results) => response.status(200).json(results.rows))
     .catch((err) => response.json(err));
 });
 
@@ -28,8 +28,8 @@ router.get("/:id", (request, response) => {
   const pool = new Pool();
   pool
     .query("SELECT * FROM money_in WHERE id = $1", [id])
-    .then((results) => response.json(results.rows))
-    .catch((err) => response.json(err));
+    .then((results) => response.status(200).json(results.rows))
+    .catch((err) => response.status(400).json(err));
 });
 
 // @route        POST /api/
@@ -46,12 +46,14 @@ router.post("/", (request, response) => {
       amount,
     ])
     .then(() =>
-      response.json({
+      response.status(201).json({
         success: true,
         message: "Record added to the database",
       })
     )
-    .catch((err) => response.json({ success: false, message: err }));
+    .catch((err) =>
+      response.status(400).json({ success: false, message: err })
+    );
 });
 
 // @route        PUT /api/:id
@@ -70,18 +72,20 @@ router.put("/:id", (request, response) => {
     .then((results) => {
       // "rowCount" returns the number or rows affected by the query
       if (results.rowCount) {
-        response.json({
+        response.status(200).json({
           success: true,
           message: "Record updated",
         });
       } else {
-        response.json({
+        response.status(204).json({
           success: false,
           message: "The record doesn't exist",
         });
       }
     })
-    .catch((err) => response.json({ success: false, message: err }));
+    .catch((err) =>
+      response.status(400).json({ success: false, message: err })
+    );
 });
 
 // @route        DELETE /api/:id
@@ -96,18 +100,20 @@ router.delete("/:id", (request, response) => {
     .then((results) => {
       // "rowCount" returns the number or rows affected by the query
       if (results.rowCount) {
-        response.json({
+        response.status(200).json({
           success: true,
           message: "Record deleted from the database",
         });
       } else {
-        response.json({
+        response.status(204).json({
           success: false,
           message: "The record doesn't exist",
         });
       }
     })
-    .catch((err) => response.json({ success: false, message: err }));
+    .catch((err) =>
+      response.status(400).json({ success: false, message: err })
+    );
 });
 
 // export the router
