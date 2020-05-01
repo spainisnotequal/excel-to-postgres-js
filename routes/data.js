@@ -16,7 +16,7 @@ router.get("/", (_request, response) => {
   const pool = new Pool();
   pool
     .query("SELECT * FROM money_in ORDER BY id ASC")
-    .then((res) => response.json(res.rows))
+    .then((results) => response.json(results.rows))
     .catch((err) => response.json(err));
 });
 
@@ -28,7 +28,7 @@ router.get("/:id", (request, response) => {
   const pool = new Pool();
   pool
     .query("SELECT * FROM money_in WHERE id = $1", [id])
-    .then((res) => response.json(res.rows))
+    .then((results) => response.json(results.rows))
     .catch((err) => response.json(err));
 });
 
@@ -67,9 +67,9 @@ router.put("/:id", (request, response) => {
       "UPDATE money_in SET date = $1, concept = $2, amount = $3 WHERE id = $4",
       [date, concept, amount, id]
     )
-    .then((res) => {
+    .then((results) => {
       // "rowCount" returns the number or rows affected by the query
-      if (res.rowCount) {
+      if (results.rowCount) {
         response.json({
           success: true,
           message: "Record updated",
@@ -93,9 +93,9 @@ router.delete("/:id", (request, response) => {
   const pool = new Pool();
   pool
     .query("DELETE FROM money_in WHERE id = $1", [id])
-    .then((res) => {
+    .then((results) => {
       // "rowCount" returns the number or rows affected by the query
-      if (res.rowCount) {
+      if (results.rowCount) {
         response.json({
           success: true,
           message: "Record deleted from the database",
