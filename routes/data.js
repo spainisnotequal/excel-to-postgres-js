@@ -17,7 +17,7 @@ router.get("/", (_request, response) => {
   pool
     .query("SELECT * FROM money_in ORDER BY id ASC")
     .then((results) => response.status(200).json(results.rows))
-    .catch((err) => response.json(err));
+    .catch((err) => response.status(400).json(err));
 });
 
 // @route        GET /api/:id
