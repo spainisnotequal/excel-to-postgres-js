@@ -77,7 +77,7 @@ router.put("/:id", (request, response) => {
           message: "Record updated",
         });
       } else {
-        response.status(204).json({
+        response.status(404).json({
           success: false,
           message: "The record doesn't exist",
         });
@@ -105,7 +105,7 @@ router.delete("/:id", (request, response) => {
           message: "Record deleted from the database",
         });
       } else {
-        response.status(204).json({
+        response.status(404).json({
           success: false,
           message: "The record doesn't exist",
         });
